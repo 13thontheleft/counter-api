@@ -1,0 +1,64 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  VisitCounterTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: site_id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: site_id
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TableName: cv-counter
+  VisitCounterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: VisitCounterFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      MemorySize: 128
+      Timeout: 30
+      Architectures:
+      - x86_64
+      Events:
+        VisitCounter:
+          Type: Api
+          Properties:
+            Path: /cv-counter
+            Method: GET
+      Policies:
+      - AmazonDynamoDBFullAccess
+    Connectors:
+      LambdaToDynamoDB:
+        Properties:
+          Destination:
+            Id: VisitCounterTable
+          Permissions:
+          - Write
+          - Read
+    Metadata:
+      SamResourceId: VisitCounterFunction
+Outputs:
+  VisitCounterApi:
+    Description: API Gateway endpoint URL for Prod stage for CV Counter function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/cv-counter/
+  VisitCounterFunction:
+    Description: CV Counter Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - VisitCounterFunction
+      - Arn
+  VisitCounterTable:
+    Description: CV Counter Table ARN
+    Value:
+      Fn::GetAtt:
+      - VisitCounterTable
+      - Arn
+  VisitCounterFunctionIamRole:
+    Description: Implicit IAM Role created for CV Counter function
+    Value:
+      Fn::GetAtt:
+      - VisitCounterFunctionRole
+      - Arn
