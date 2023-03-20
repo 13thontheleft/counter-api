@@ -49,13 +49,13 @@ def lambda_handler(event, context):
         item = cv_counter.get_total()
         total = item['total']
         json_string = f'"total": {total}'
-        return json.dumps({
+        return {
             "statusCode": 200,
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             },
-            "body": f'{json_string}',
-        })
+            "body": json.dumps(f'{json_string}'),
+        }
     else:
         raise
 
