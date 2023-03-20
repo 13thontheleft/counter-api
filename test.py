@@ -21,7 +21,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_total_is_JSON_object(self):
         data = lambda_handler(None, None)
-        self.assertIs(self.is_json(data['body']), False)
+        self.assertIs(self.is_json(data['body']), True)
 
     def is_json(self, myjson):
         try:
