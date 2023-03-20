@@ -12,6 +12,7 @@ class CVCounter:
         try:
             self.table.load()
             exists = True
+
         except ClientError as err:
             if err.response['Error']['Code'] == 'ResourceNotFoundException':
                 exists = False
@@ -46,17 +47,15 @@ def lambda_handler(event, context):
     if cv_counter.table_exists():
         cv_counter.increment_total()
         item = cv_counter.get_total()
-        return {
+        total = item['total']
+        json_string = f'"total": {total}'
+        return json.dumps({
             "statusCode": 200,
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             },
-            "body": json.dumps({
-                "total": f"{item['total']}"
-                # "location": ip.text.replace("\n", "")
-            }),
-        }
+            "body": f'{json_string}',
+        })
     else:
         raise
-
 

@@ -22,7 +22,7 @@ capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ehp0p2x4pvzd"
-s3_prefix = "sam-hello-world"
+s3_prefix = "sam-simple-counter"
 region = "eu-west-1"
 image_repositories = []
 
