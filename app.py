@@ -54,7 +54,7 @@ def lambda_handler(event, context):
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             },
-            "body": json.dumps(f'{json_string}'),
+            "body": json.dumps({f'{json_string}'}),
         }
     else:
         raise
