@@ -47,15 +47,18 @@ def lambda_handler(event, context):
     if cv_counter.table_exists():
         cv_counter.increment_total()
         item = cv_counter.get_total()
-        total = item['total']
-        json_string = f'"total": {total}'
+        data = {
+            "total": int(item['total'])
+        }
         return {
             "statusCode": 200,
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             },
-            "body": json.dumps({f'{json_string}'}),
+            "body": json.dumps(data),
         }
     else:
         raise
 
+
+print(lambda_handler(None, None))
